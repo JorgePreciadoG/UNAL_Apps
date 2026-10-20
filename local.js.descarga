@@ -1,0 +1,95 @@
+$(document).ready(function () {
+
+
+    setTimeout(function () {
+        $("#flash-message").fadeOut();
+    }, 10000);
+
+    function datePickerLoad() {
+        $(".datetime").datetimepicker({
+            format: 'yyyy-MM-DD hh:mm:ss'
+        });
+    }
+
+    function loadCurrentPagination() {
+        let elem = $("#pagination-number-rows")
+        if (elem.length > 0) {
+            $.getJSON("/ws/pagination", function (data) {
+                $("#pagination-number-rows").val(data['pagSize']);
+            });
+        }
+    }
+
+    function changeCurrentPagination() {
+        let elem = $("#pagination-number-rows")
+        if (elem.length > 0) {
+            $.getJSON("/ws/pagination/" + elem.val(), function (data) {
+                window.location.reload(true);
+            });
+        }
+
+    }
+
+    loadCurrentPagination();
+    $("#pagination-number-rows").change(changeCurrentPagination);
+    datePickerLoad();
+
+})
+
+function togglePassword(inputId, btnId) {
+    let passwordInput = document.getElementById(inputId);
+    let button = document.getElementById(btnId);
+    if (passwordInput.type === "password") {
+        passwordInput.type = "text";
+        button.innerHTML = '<span class="material-symbols-outlined icon-sm" translate="no">visibility_off</span>';
+    } else {
+        passwordInput.type = "password";
+        button.innerHTML = '<span class="material-symbols-outlined icon-sm" translate="no">visibility</span>';
+    }
+}
+
+function forceLower(strInput) {
+    strInput.value = strInput.value.toLowerCase();
+}
+
+
+function setRejectDocument(src) {
+    const id = src.getAttribute("data-id");
+
+    document.getElementById("documento_id").value = id;
+}
+
+function setRejectSign(src) {
+    const id = src.getAttribute("data-id");
+    document.getElementById("firma_id").value = id;
+    console.log(id);
+}
+
+
+function showConfirmModal(mensaje, body, onConfirm, status = "danger", icon = "info") {
+    document.getElementById('confirmModalIcon').innerHTML = icon;
+    document.getElementById('confirmModalLabel').innerHTML = mensaje;
+    document.getElementById('confirmModalBody').innerHTML = body;
+    document.getElementById('confirmModal').className = 'modal-' + status + ' fade modal';
+
+    const btnConfirm = document.getElementById('confirmModalBtn');
+    const btnCancel = document.getElementById('confirmModalCancelBtn');
+
+    // Quitar clases previas de color
+    btnConfirm.classList.remove('btn-danger', 'btn-warning', 'btn-success', 'btn-primary', 'btn-secondary', 'btn-info');
+    btnCancel.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-outline-primary', 'btn-outline-secondary', 'btn-outline-info');
+
+    btnConfirm.classList.add('btn-' + status);
+    btnCancel.classList.add('btn-outline-' + status);
+
+    // Elimina listeners previos
+    btnConfirm.onclick = null;
+    btnConfirm.onclick = function () {
+        onConfirm();
+        let modal = kitUnal.Modal.getInstance(document.getElementById('confirmModal'));
+        modal.hide();
+    };
+
+    let modal = new kitUnal.Modal(document.getElementById('confirmModal'));
+    modal.show();
+}

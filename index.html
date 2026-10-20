@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="icon" type="image/x-icon" href="https://gestionapp.medellin.unal.edu.co/cdn/assets/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=0.5, maximum-scale=2.5, user-scalable=yes">
+    <title>Sistema Nacional de Becas - Consulta Reforma</title>
+
+    <!-- plantilla Apps UNAL -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link rel="stylesheet"
+        href="./UNAL_Apps/kitUnal.min.css">
+    <link rel="stylesheet"
+        href="./UNAL_Apps/main.min.css">
+    <link rel="stylesheet" type="text/css"
+        href="./UNAL_Apps/jquery-ui.min.css"
+        media="all">
+    <link rel="stylesheet" type="text/css"
+        href="./UNAL_Apps/bootstrap-datetimepicker.min.css"
+        media="all">
+    <link rel="stylesheet" type="text/css"
+        href="./UNAL_Apps/cropper.min.css">
+
+
+    <script src="./UNAL_Apps/jquery.js.descarga"
+        type="text/javascript"></script>
+    <script
+        src="./UNAL_Apps/jquery-ui.min.js.descarga"
+        type="text/javascript"></script>
+    <script src="./UNAL_Apps/local.js.descarga"
+        type="text/javascript"></script>
+    <script
+        src="./UNAL_Apps/moment.min.js.descarga"
+        type="text/javascript"></script>
+    <script
+        src="./UNAL_Apps/bootstrap-datetimepicker.min.js.descarga"
+        type="text/javascript"></script>
+    <script
+        src="./UNAL_Apps/kitUnal.bundle.min.js.descarga"></script>
+
+
+<!-- Tailwind CSS Integrado para UI Moderna -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        snb: {
+                            turquesa: '#1C444E',
+                            lila: '#C2A3FF', 
+                            verde: '#62D385',
+                            lima: '#C5F330'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['"Ancizar Sans"', 'sans-serif'], 
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <style>
+        @font-face {
+            font-family: 'Ancizar Sans';
+            src: url('https://unal.edu.co/fileadmin/templates/docs/AncizarSans-Regular.ttf') format('truetype');
+            font-weight: 400;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Ancizar Sans';
+            src: url('https://unal.edu.co/fileadmin/templates/docs/AncizarSans-Bold.ttf') format('truetype');
+            font-weight: 700;
+            font-style: normal;
+        }
+
+        body { font-family: 'Ancizar Sans', sans-serif; background-color: #f8fafc; }
+        
+        /* Animaciones para transiciones entre vistas */
+        .fade-in { animation: fadeIn 0.4s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        /* Estilos del Carrusel y Zoom Lupa */
+        .carousel-container { position: relative; overflow: hidden; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); width: 100%; }
+        .carousel-inner { display: flex; transition: transform 0.5s ease-in-out; aspect-ratio: 16/9; w-full; }
+        .carousel-item { min-width: 100%; height: 100%; position: relative; overflow: hidden; }
+        .carousel-image { width: 100%; height: 100%; object-fit: contain; background-color: #f1f5f9; transition: transform 0.15s ease-out; transform-origin: center center; }
+        .carousel-item:hover .carousel-image { transform: scale(2.2); cursor: crosshair; }
+        
+        /* Estilos tipo pestaña para los roles */
+        .role-tab { transition: all 0.2s; border: 2px solid transparent; }
+        .role-tab.active { border-color: #C2A3FF; background-color: #f5f3ff; box-shadow: 0 4px 6px -1px rgba(194, 163, 255, 0.3); transform: translateY(-2px); }
+        .role-tab:hover:not(.active) { border-color: #C2A3FF; background-color: #f8fafc; }
+
+        /* Custom Radio/Checkbox Cards */
+        .option-card input:checked + div { border-color: #C2A3FF; background-color: #f5f3ff; font-weight: 600; color: #1C444E; }
+        .scale-radio input:checked + div { background-color: #C2A3FF; color: #1C444E; border-color: #C2A3FF; font-weight: bold; }
+    </style>
+</head>
+
+<body class="text-slate-800">
+    <header class="m-0">
+
+        <div class="section-icon">
+            <div class="banner-container">
+                <a href="https://unal.edu.co/" target="_blank" rel="noopener" class="icon-link">
+                    <img src="https://posgrados.unal.edu.co/wp-content/uploads/2026/10/logo_unal_circle.png"
+                        alt="Escudo de UNAL" mime="image/png" type="image">
+                </a>
+            </div>
+        </div>
+
+        <div id="divider-top"></div>
+
+        <div id="section-menu-middle">
+            <div class="padded-container">
+                <p id="name-aplication"></p>
+            </div>
+            <div style="width: 20%; margin-right: 2rem;"><img src="https://posgrados.unal.edu.co/wp-content/uploads/2026/10/recurso-1.png" alt=""></div>
+        </div>
+    </header>
+
+    <main class="max-w-[90rem] w-full mx-auto p-4 md:p-6 flex flex-col items-center min-h-[80vh]">
+        
+        <!-- CARRUSEL DE REFERENCIA (Flujo normal de scroll) -->
+        <div class="w-full max-w-5xl mx-auto relative z-10 bg-[#f8fafc] pt-2 pb-6 mb-8 border-b border-slate-200 fade-in">
+            <div class="flex items-center gap-2 justify-center text-snb-turquesa pb-2 mb-2">
+                <span class="material-icons text-sm">collections</span>
+                <h3 class="font-bold text-sm">Material de Referencia (Pasa el cursor para efecto lupa)</h3>
+            </div>
+            
+            <!-- Carrusel interactivo (16:9 estricto) -->
+            <div class="carousel-container group rounded-xl bg-white shadow-sm border border-slate-100 flex justify-center">
+                <div class="carousel-inner w-full" id="carousel">
+                    <div class="carousel-item"><img src="https://posgrados.unal.edu.co/wp-content/uploads/2026/10/1.png" class="carousel-image" alt="Infografía 1"></div>
+                    <div class="carousel-item"><img src="https://posgrados.unal.edu.co/wp-content/uploads/2026/10/2.png" class="carousel-image" alt="Infografía 2"></div>
+                    <div class="carousel-item"><img src="https://posgrados.unal.edu.co/wp-content/uploads/2026/10/5.png" class="carousel-image" alt="Infografía 3"></div>
+                    <div class="carousel-item"><img src="https://posgrados.unal.edu.co/wp-content/uploads/2026/10/6.png" class="carousel-image" alt="Infografía 4"></div>
+                    <div class="carousel-item"><img src="https://posgrados.unal.edu.co/wp-content/uploads/2026/10/7.png" class="carousel-image" alt="Infografía 5"></div>
+                </div>
+                <!-- Controles -->
+                <button onclick="moveCarousel(-1)" class="absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-snb-turquesa p-1.5 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity z-10"><span class="material-icons">chevron_left</span></button>
+                <button onclick="moveCarousel(1)" class="absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-snb-turquesa p-1.5 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity z-10"><span class="material-icons">chevron_right</span></button>
+                <!-- Indicadores -->
+                <div class="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5 z-10" id="carousel-indicators"></div>
+            </div>
+            
+            <!-- Enlace Permanente de Consulta -->
+            <div class="text-center mt-4">
+                <a href="https://drive.google.com/file/d/1kI4Hnw5387wwk3AKXg-xpcUnMZo68jy4/view" target="_blank" class="text-snb-turquesa hover:text-[#133038] hover:underline font-semibold text-sm inline-flex items-center justify-center gap-1 transition-colors">
+                    <span class="material-icons text-[18px]">menu_book</span> Consultar Documento Propuesta Completa (PDF)
+                </a>
+            </div>
+        </div>
+
+        <!-- SECCIÓN DE CONTENIDO DINÁMICO (Formulario) -->
+        <section class="w-full max-w-3xl z-10 relative">
+            
+            <!-- PANTALLA INTRODUCCIÓN -->
+            <div id="view-intro" class="fade-in block space-y-8 bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-slate-100">
+                <div class="text-center space-y-4">
+                    <span class="inline-block bg-snb-lima text-snb-turquesa text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">Consulta Abierta</span>
+                    <h2 class="text-2xl md:text-3xl font-bold text-snb-turquesa">Propuesta de Reforma del Sistema de Becas de Posgrado</h2>
+                    <p class="text-slate-600">La Vicerrectoría Académica te invita a compartir tus observaciones. Puedes utilizar las infografías adjuntas como material de consulta permanente mientras participas.</p>
+                </div>
+
+                <!-- Botones de Acción -->
+                <div class="flex flex-col sm:flex-row gap-4 justify-center pt-4">
+                    <button onclick="startApp()" class="flex items-center justify-center gap-2 px-8 py-3 bg-snb-lila text-snb-turquesa rounded-xl hover:bg-[#b08df8] shadow-lg shadow-snb-lila/30 transition-all font-bold transform hover:-translate-y-0.5">
+                        Participar <span class="material-icons text-xl">arrow_forward</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- CONTENEDOR PRINCIPAL DEL WIZARD (FORMULARIO) -->
+            <div id="view-form" class="hidden fade-in space-y-8">
+                <!-- Barra de progreso conceptual y Visión de Rol -->
+                <div class="flex flex-col gap-4 mb-8 sticky top-[72px] bg-[#f8fafc] z-40 py-3 border-b border-slate-200">
+                    <div class="flex items-center justify-between min-h-[32px]">
+                        <div id="role-indicator" class="hidden items-center gap-2 px-4 py-1.5 bg-snb-lila/20 text-snb-turquesa rounded-full border border-snb-lila/50 text-sm font-bold transition-all shadow-sm">
+                            Visión de: <span id="ri-icon" class="material-icons text-base"></span> <span id="ri-text"></span>
+                        </div>
+                    </div>
+                    <div class="flex gap-2">
+                        <div id="prog-1" class="h-2 flex-1 bg-snb-lila/50 rounded-full transition-all"></div>
+                        <div id="prog-2" class="h-2 flex-1 bg-snb-lila/30 rounded-full transition-all"></div>
+                        <div id="prog-3" class="h-2 flex-1 bg-snb-lila/30 rounded-full transition-all"></div>
+                    </div>
+                </div>
+
+                <form id="feedbackForm" onsubmit="event.preventDefault(); submitForm();">
+                    
+                    <!-- SECCIÓN 1: PERFIL -->
+                    <div id="sec-perfil" class="space-y-8 fade-in">
+                        <div class="space-y-4">
+                            <label class="block font-semibold text-slate-700">Selecciona el rol desde el cual responderás:</label>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="rol" value="estudiante" class="hidden" onchange="handleRoleChange()">
+                                    <div class="role-tab bg-slate-50 p-4 rounded-xl flex items-start gap-3 h-full">
+                                        <span class="material-icons text-snb-turquesa mt-0.5">school</span>
+                                        <div><p class="font-semibold text-sm">Estudiante de posgrado</p><p class="text-xs text-slate-500">Activo en la UNAL</p></div>
+                                    </div>
+                                </label>
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="rol" value="admitido" class="hidden" onchange="handleRoleChange()">
+                                    <div class="role-tab bg-slate-50 p-4 rounded-xl flex items-start gap-3 h-full">
+                                        <span class="material-icons text-snb-turquesa mt-0.5">how_to_reg</span>
+                                        <div><p class="font-semibold text-sm">Admitida/o</p><p class="text-xs text-slate-500">A programa de posgrado</p></div>
+                                    </div>
+                                </label>
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="rol" value="docente" class="hidden" onchange="handleRoleChange()">
+                                    <div class="role-tab bg-slate-50 p-4 rounded-xl flex items-start gap-3 h-full">
+                                        <span class="material-icons text-snb-turquesa mt-0.5">local_library</span>
+                                        <div><p class="font-semibold text-sm">Profesor(a) / Seguimiento</p><p class="text-xs text-slate-500">Responsable académico</p></div>
+                                    </div>
+                                </label>
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="rol" value="administrativo" class="hidden" onchange="handleRoleChange()">
+                                    <div class="role-tab bg-slate-50 p-4 rounded-xl flex items-start gap-3 h-full">
+                                        <span class="material-icons text-snb-turquesa mt-0.5">business_center</span>
+                                        <div><p class="font-semibold text-sm">Personal Administrativo</p><p class="text-xs text-slate-500">o Directivo</p></div>
+                                    </div>
+                                </label>
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="rol" value="interesado" class="hidden" onchange="handleRoleChange()">
+                                    <div class="role-tab bg-slate-50 p-4 rounded-xl flex items-start gap-3 h-full">
+                                        <span class="material-icons text-snb-turquesa mt-0.5">person_add</span>
+                                        <div><p class="font-semibold text-sm">Persona interesada</p><p class="text-xs text-slate-500">En cursar posgrado</p></div>
+                                    </div>
+                                </label>
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="rol" value="otro" class="hidden" onchange="handleRoleChange()">
+                                    <div class="role-tab bg-slate-50 p-4 rounded-xl flex items-start gap-3 h-full">
+                                        <span class="material-icons text-snb-turquesa mt-0.5">more_horiz</span>
+                                        <div><p class="font-semibold text-sm">Otro rol</p></div>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div id="cond-sede" class="hidden fade-in space-y-4">
+                            <label class="block font-semibold text-slate-700">Sede o nivel institucional de vinculación principal:</label>
+                            <select name="sede" onchange="handleSedeChange()" class="w-full p-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-snb-turquesa focus:border-snb-turquesa outline-none bg-slate-50">
+                                <option value="">Selecciona una opción...</option>
+                                <option value="Bogotá">Sede Bogotá</option>
+                                <option value="Medellín">Sede Medellín</option>
+                                <option value="Manizales">Sede Manizales</option>
+                                <option value="Palmira">Sede Palmira</option>
+                                <option value="De La Paz">Sede de La Paz</option>
+                                <option value="Orinoquía">Sede Orinoquía</option>
+                                <option value="Amazonía">Sede Amazonía</option>
+                                <option value="Caribe">Sede Caribe</option>
+                                <option value="Tumaco">Sede Tumaco</option>
+                                <option value="Nivel Nacional">Nivel Nacional</option>
+                                <option value="No definida">No tengo vinculación definida</option>
+                            </select>
+                        </div>
+
+                        <div id="cond-facultad" class="hidden fade-in space-y-4">
+                            <label class="block font-semibold text-slate-700">Facultad o dependencia (Opcional):</label>
+                            <input type="text" name="facultad" placeholder="Ej. Facultad de Ciencias..." class="w-full p-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-snb-turquesa bg-slate-50 outline-none">
+                        </div>
+
+                        <div id="cond-nivel" class="hidden fade-in space-y-4">
+                            <label class="block font-semibold text-slate-700">Nivel de posgrado al que corresponde tu respuesta:</label>
+                            <div class="flex flex-wrap gap-3">
+                                <label class="option-card cursor-pointer"><input type="radio" name="nivel" value="Especialización" class="hidden"><div class="px-4 py-2 border border-slate-300 rounded-lg text-sm transition-colors bg-white">Especialización</div></label>
+                                <label class="option-card cursor-pointer"><input type="radio" name="nivel" value="Especialidad Clínica" class="hidden"><div class="px-4 py-2 border border-slate-300 rounded-lg text-sm transition-colors bg-white">Especialidad Clínica</div></label>
+                                <label class="option-card cursor-pointer"><input type="radio" name="nivel" value="Maestría" class="hidden"><div class="px-4 py-2 border border-slate-300 rounded-lg text-sm transition-colors bg-white">Maestría</div></label>
+                                <label class="option-card cursor-pointer"><input type="radio" name="nivel" value="Doctorado" class="hidden"><div class="px-4 py-2 border border-slate-300 rounded-lg text-sm transition-colors bg-white">Doctorado</div></label>
+                            </div>
+                        </div>
+
+                        <div id="cond-beca" class="hidden fade-in space-y-4 p-5 bg-slate-100 rounded-xl border border-slate-200">
+                            <label class="block font-semibold text-slate-700">¿Actualmente tienes una beca para tus estudios?</label>
+                            <div class="flex flex-col gap-2">
+                                <label class="option-card cursor-pointer"><input type="radio" name="beca" value="Universidad" class="hidden"><div class="px-4 py-3 border border-slate-300 rounded-lg text-sm bg-white hover:bg-slate-50 transition-colors">Sí, de la Universidad</div></label>
+                                <label class="option-card cursor-pointer"><input type="radio" name="beca" value="Externa" class="hidden"><div class="px-4 py-3 border border-slate-300 rounded-lg text-sm bg-white hover:bg-slate-50 transition-colors">Sí, de una fuente externa</div></label>
+                                <label class="option-card cursor-pointer"><input type="radio" name="beca" value="Ambas" class="hidden"><div class="px-4 py-3 border border-slate-300 rounded-lg text-sm bg-white hover:bg-slate-50 transition-colors">Sí, de ambas</div></label>
+                                <label class="option-card cursor-pointer"><input type="radio" name="beca" value="No" class="hidden"><div class="px-4 py-3 border border-slate-300 rounded-lg text-sm bg-white hover:bg-slate-50 transition-colors">No</div></label>
+                                <label class="option-card cursor-pointer"><input type="radio" name="beca" value="No seguro" class="hidden"><div class="px-4 py-3 border border-slate-300 rounded-lg text-sm bg-white hover:bg-slate-50 transition-colors">No estoy seguro(a)</div></label>
+                            </div>
+                        </div>
+
+                        <div id="cond-conocimiento" class="hidden fade-in space-y-4 mt-8 pt-8 border-t border-slate-200">
+                            <label class="block font-bold text-lg text-snb-turquesa">Nivel de familiaridad con la propuesta</label>
+                            <p class="text-sm text-slate-500">¿Qué tanto has revisado o conocido la propuesta de reforma?</p>
+                            <div class="flex flex-col gap-2">
+                                <label class="option-card cursor-pointer"><input type="radio" name="conocimiento" value="Completo" class="hidden"><div class="px-4 py-3 border border-slate-300 rounded-lg text-sm hover:bg-slate-50 bg-white transition-colors">He leído el texto completo</div></label>
+                                <label class="option-card cursor-pointer"><input type="radio" name="conocimiento" value="Partes" class="hidden"><div class="px-4 py-3 border border-slate-300 rounded-lg text-sm hover:bg-slate-50 bg-white transition-colors">He leído algunas partes</div></label>
+                                <label class="option-card cursor-pointer"><input type="radio" name="conocimiento" value="Resumen" class="hidden"><div class="px-4 py-3 border border-slate-300 rounded-lg text-sm hover:bg-slate-50 bg-white transition-colors">Conozco únicamente el resumen o socialización</div></label>
+                                <label class="option-card cursor-pointer"><input type="radio" name="conocimiento" value="Ninguno" class="hidden"><div class="px-4 py-3 border border-slate-300 rounded-lg text-sm hover:bg-slate-50 bg-white transition-colors">Aún no he revisado el texto ni conozco su contenido</div></label>
+                            </div>
+                            <div class="text-right mt-6">
+                                <button type="button" onclick="nextFromPerfil()" class="px-6 py-2.5 bg-snb-lila text-snb-turquesa font-bold rounded-lg hover:bg-[#b08df8] transition-colors shadow-md">Siguiente Paso</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="sec-generales" class="hidden space-y-8 fade-in">
+                        <div id="g-questions-container" class="space-y-8"></div>
+                        
+                        <div class="space-y-4">
+                            <label class="block font-semibold text-slate-700">En lo que revisaste, ¿identificaste alguna de estas situaciones?</label>
+                            <div class="flex flex-col gap-2">
+                                <label class="option-card cursor-pointer"><input type="radio" name="g_situaciones" value="Contradicciones" class="hidden"><div class="px-4 py-3 border border-slate-300 rounded-lg text-sm bg-white hover:bg-slate-50 transition-colors">Reglas que parecen contradecirse.</div></label>
+                                <label class="option-card cursor-pointer"><input type="radio" name="g_situaciones" value="Vacio" class="hidden"><div class="px-4 py-3 border border-slate-300 rounded-lg text-sm bg-white hover:bg-slate-50 transition-colors">Una situación relevante para la cual no encuentro una respuesta.</div></label>
+                                <label class="option-card cursor-pointer"><input type="radio" name="g_situaciones" value="Ambas" class="hidden"><div class="px-4 py-3 border border-slate-300 rounded-lg text-sm bg-white hover:bg-slate-50 transition-colors">Ambas situaciones.</div></label>
+                                <label class="option-card cursor-pointer"><input type="radio" name="g_situaciones" value="Ninguna" class="hidden"><div class="px-4 py-3 border border-slate-300 rounded-lg text-sm bg-white hover:bg-slate-50 transition-colors">No identifiqué ninguna.</div></label>
+                                <label class="option-card cursor-pointer"><input type="radio" name="g_situaciones" value="Info insuficiente" class="hidden"><div class="px-4 py-3 border border-slate-300 rounded-lg text-sm bg-white hover:bg-slate-50 transition-colors">No cuento con información suficiente.</div></label>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-between mt-8 border-t pt-6">
+                            <button type="button" onclick="goBack('sec-generales', 'sec-perfil')" class="text-slate-500 hover:text-slate-800 font-medium px-4 py-2">Atrás</button>
+                            <button type="button" onclick="nextFromGenerales()" class="px-6 py-2.5 bg-snb-lila text-snb-turquesa font-bold rounded-lg hover:bg-[#b08df8] transition-colors shadow-md">Siguiente</button>
+                        </div>
+                    </div>
+
+                    <div id="sec-estudiantes" class="hidden space-y-8 fade-in">
+                        <h3 class="text-2xl font-bold text-snb-turquesa border-b pb-2">Sección Estudiantes y Admitidos</h3>
+                        <p class="text-sm text-slate-600">Considera las reglas de la Beca Única de Posgrado (BUP). Si no tienes beca hoy, piensa en qué ocurriría si te postularas.</p>
+                        <div id="e-questions-container" class="space-y-8"></div>
+                        <div class="flex justify-between mt-8 border-t pt-6">
+                            <button type="button" onclick="goBack('sec-estudiantes', 'sec-generales')" class="text-slate-500 font-medium px-4 py-2">Atrás</button>
+                            <button type="button" onclick="nextToCierre('sec-estudiantes')" class="px-6 py-2.5 bg-snb-lila text-snb-turquesa font-bold rounded-lg hover:bg-[#b08df8] transition-colors shadow-md">Ir al Cierre</button>
+                        </div>
+                    </div>
+
+                    <div id="sec-docentes" class="hidden space-y-8 fade-in">
+                        <h3 class="text-2xl font-bold text-snb-turquesa border-b pb-2">Sección Responsables Académicos</h3>
+                        <p class="text-sm text-slate-600">Responde desde tu experiencia. Si algo no aplica a tu función, selecciona "No aplica".</p>
+                        <div id="d-questions-container" class="space-y-8"></div>
+                        <div class="flex justify-between mt-8 border-t pt-6">
+                            <button type="button" onclick="goBack('sec-docentes', 'sec-generales')" class="text-slate-500 font-medium px-4 py-2">Atrás</button>
+                            <button type="button" onclick="nextToCierre('sec-docentes')" class="px-6 py-2.5 bg-snb-lila text-snb-turquesa font-bold rounded-lg hover:bg-[#b08df8] transition-colors shadow-md">Ir al Cierre</button>
+                        </div>
+                    </div>
+
+                    <div id="sec-admin" class="hidden space-y-8 fade-in">
+                        <h3 class="text-2xl font-bold text-snb-turquesa border-b pb-2">Sección Personal Administrativo</h3>
+                        <p class="text-sm text-slate-600">Responde desde las funciones de tu dependencia. Valora el ciclo y criterios propuestos.</p>
+                        <div id="a-questions-container" class="space-y-8"></div>
+                        <div class="flex justify-between mt-8 border-t pt-6">
+                            <button type="button" onclick="goBack('sec-admin', 'sec-generales')" class="text-slate-500 font-medium px-4 py-2">Atrás</button>
+                            <button type="button" onclick="nextToCierre('sec-admin')" class="px-6 py-2.5 bg-snb-lila text-snb-turquesa font-bold rounded-lg hover:bg-[#b08df8] transition-colors shadow-md">Ir al Cierre</button>
+                        </div>
+                    </div>
+
+                    <div id="sec-cierre" class="hidden space-y-8 fade-in">
+                        <h3 class="text-2xl font-bold text-snb-turquesa border-b pb-2">Comentarios Finales y Cierre</h3>
+                        
+                        <div class="space-y-4">
+                            <label class="block font-semibold text-slate-700">¿Qué temas consideras prioritario revisar o ajustar? (Selecciona hasta 2)</label>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm" id="prioritarios-container">
+                            </div>
+                        </div>
+
+                        <div class="space-y-4 mt-6">
+                            <label class="block font-semibold text-slate-700">¿Identificas alguna regla que pueda dificultar el acceso o la continuidad de determinadas personas?</label>
+                            <select name="f_barreras" class="w-full p-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-snb-turquesa outline-none">
+                                <option value="">Selecciona...</option>
+                                <option value="Si">Sí</option>
+                                <option value="No">No identifico una</option>
+                                <option value="Info insuficiente">No cuento con información suficiente</option>
+                            </select>
+                        </div>
+
+                        <div class="space-y-4 mt-6">
+                            <label class="block font-semibold text-slate-700">¿Qué cambiarías o agregarías a la propuesta y por qué? <span class="font-normal text-slate-400">(Opcional)</span></label>
+                            <textarea name="f_cambios" rows="4" class="w-full p-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-snb-turquesa outline-none resize-none" placeholder="Describe el problema y el ajuste que propones..."></textarea>
+                        </div>
+
+                        <div class="space-y-4 mt-6">
+                            <label class="block font-semibold text-slate-700">¿Qué aspecto de la propuesta consideras valioso y recomendarías conservar? <span class="font-normal text-slate-400">(Opcional)</span></label>
+                            <textarea name="f_valiosos" rows="3" class="w-full p-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-snb-turquesa outline-none resize-none" placeholder="Explica brevemente qué aporta..."></textarea>
+                        </div>
+
+                        <div class="flex justify-between items-center mt-8 border-t pt-6 bg-slate-50 p-4 rounded-xl">
+                            <button type="button" onclick="backFromCierre()" class="text-slate-500 font-medium px-4 py-2 hover:bg-white rounded-lg transition-colors">Atrás</button>
+                            <button type="submit" id="btnSubmit" class="px-8 py-3 bg-snb-turquesa text-white font-bold rounded-xl hover:bg-[#133038] transition-all shadow-lg flex items-center gap-2">
+                                Enviar Aportes <span class="material-icons text-snb-lima">send</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="sec-success" class="hidden text-center py-16 space-y-6 fade-in">
+                        <div class="w-20 h-20 bg-snb-lila text-snb-turquesa rounded-full flex items-center justify-center mx-auto mb-6">
+                            <span class="material-icons text-4xl">check_circle</span>
+                        </div>
+                        <h2 class="text-3xl font-bold text-snb-turquesa">¡Gracias por participar!</h2>
+                        <p class="text-slate-600 max-w-md mx-auto">Tus observaciones han sido registradas exitosamente y serán analizadas para orientar la revisión de la propuesta de Acuerdo.</p>
+                        
+                        <div class="flex flex-col sm:flex-row justify-center gap-4 mt-8">
+                            <button type="button" onclick="location.reload()" class="px-6 py-3 border-2 border-snb-lila text-snb-turquesa rounded-xl font-bold hover:bg-snb-lila/10 transition-colors">Registrar otra respuesta</button>
+                            <a href="https://posgrados.unal.edu.co" target="_blank" class="px-6 py-3 bg-snb-turquesa text-white rounded-xl font-bold hover:bg-[#133038] shadow-lg transition-colors inline-flex items-center justify-center gap-2">
+                                Sitio web de la propuesta <span class="material-icons text-sm">open_in_new</span>
+                            </a>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <!-- Contenedor para notificaciones Toast (reemplaza alertas nativas) -->
+    <div id="toast-container" class="fixed bottom-4 right-4 z-50 flex flex-col gap-2"></div>
+
+    <footer class="clear">
+
+        <p class="copyright">© Copyright 2026 - Algunos Derechos Reservados</p>
+        <div class="info-help">
+            <p class="dependency">Dirección Nacional de programas de Posgrado</p>
+            <div class="vr"></div>
+            <a class="help-link" href="https://posgrados.unal.edu.co" target="_blank">
+                <span class="material-symbols-outlined icon">contact_support</span>
+                <span class="text-decoration-underline">¿Necesitas ayuda?</span>
+            </a>
+        </div>
+        <div class="more-info">
+            <p>Versión <span>20261020-JPG002</span></p>
+            <div class="vr"></div>
+            <p><a class="link-neutral-100" href="https://unal.edu.co/proteccion-de-datos-personales"
+                    target="_blank">Tratamiento
+                    de Datos Personales</a></p>
+        </div>
+    </footer>
+
+    <script>
+        // --- CONFIGURACIÓN BACKEND ---
+        const APP_SCRIPT_URL = "URL_DE_TU_APPS_SCRIPT_AQUI"; 
+        
+        let slideIndex = 0;
+        const slides = document.querySelectorAll('.carousel-item');
+        const indicatorsContainer = document.getElementById('carousel-indicators');
+        
+        slides.forEach((_, i) => {
+            const dot = document.createElement('div');
+            dot.className = `w-2.5 h-2.5 rounded-full cursor-pointer transition-colors ${i === 0 ? 'bg-snb-lima' : 'bg-white/50'}`;
+            dot.onclick = () => goToSlide(i);
+            indicatorsContainer.appendChild(dot);
+        });
+        const dots = indicatorsContainer.children;
+
+        function updateCarousel() {
+            document.getElementById('carousel').style.transform = `translateX(-${slideIndex * 100}%)`;
+            Array.from(dots).forEach((dot, i) => {
+                dot.className = `w-2.5 h-2.5 rounded-full cursor-pointer transition-colors ${i === slideIndex ? 'bg-snb-lima' : 'bg-white/50'}`;
+            });
+        }
+        function moveCarousel(step) {
+            slideIndex = (slideIndex + step + slides.length) % slides.length;
+            updateCarousel();
+        }
+        function goToSlide(index) {
+            slideIndex = index;
+            updateCarousel();
+        }
+        
+        let autoSlide = setInterval(() => moveCarousel(1), 5000);
+        document.querySelector('.carousel-container').addEventListener('mouseenter', () => clearInterval(autoSlide));
+        document.querySelector('.carousel-container').addEventListener('mouseleave', () => autoSlide = setInterval(() => moveCarousel(1), 5000));
+
+        // Lógica del Efecto Lupa (Magnifying Glass)
+        document.querySelectorAll('.carousel-item').forEach(item => {
+            const img = item.querySelector('.carousel-image');
+            item.addEventListener('mousemove', (e) => {
+                const rect = item.getBoundingClientRect();
+                const x = ((e.clientX - rect.left) / rect.width) * 100;
+                const y = ((e.clientY - rect.top) / rect.height) * 100;
+                img.style.transformOrigin = `${x}% ${y}%`;
+            });
+            item.addEventListener('mouseleave', () => {
+                img.style.transformOrigin = 'center center';
+            });
+        });
+
+        let currentRole = '';
+        let currentRoleText = '';
+        let currentRoleIcon = '';
+        let routeSource = ''; 
+
+        // Sistema de Notificaciones Toast (Reemplazo de alerts)
+        function showToast(message, type = 'error') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            const bgColor = type === 'error' ? 'bg-red-500' : 'bg-orange-500';
+            const icon = type === 'error' ? 'error_outline' : 'warning_amber';
+            
+            toast.className = `${bgColor} text-white px-4 py-3 rounded-lg shadow-lg flex items-center gap-3 transform transition-all duration-300 translate-y-10 opacity-0`;
+            toast.innerHTML = `<span class="material-icons">${icon}</span><span class="font-medium text-sm">${message}</span>`;
+            
+            container.appendChild(toast);
+            
+            // Animar entrada
+            setTimeout(() => {
+                toast.classList.remove('translate-y-10', 'opacity-0');
+            }, 10);
+
+            // Remover después de 3.5 segundos
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-2');
+                setTimeout(() => toast.remove(), 300);
+            }, 3500);
+        }
+
+        function startApp() {
+            document.getElementById('view-intro').classList.add('hidden');
+            document.getElementById('view-form').classList.remove('hidden');
+        }
+
+        function updateTabStyles() {
+            document.querySelectorAll('.role-tab').forEach(tab => tab.classList.remove('active'));
+            const checked = document.querySelector('input[name="rol"]:checked');
+            if(checked) checked.nextElementSibling.classList.add('active');
+        }
+
+        function handleRoleChange() {
+            updateTabStyles();
+            const selectedInput = document.querySelector('input[name="rol"]:checked');
+            currentRole = selectedInput.value;
+            
+            const roleContainer = selectedInput.nextElementSibling;
+            currentRoleIcon = roleContainer.querySelector('.material-icons').innerText;
+            currentRoleText = roleContainer.querySelector('p.font-semibold').innerText;
+            
+            document.getElementById('cond-sede').classList.remove('hidden');
+            document.getElementById('cond-conocimiento').classList.remove('hidden');
+            document.getElementById('cond-nivel').classList.add('hidden');
+            document.getElementById('cond-beca').classList.add('hidden');
+            
+            if(currentRole === 'estudiante' || currentRole === 'admitido') {
+                document.getElementById('cond-nivel').classList.remove('hidden');
+                if(currentRole === 'estudiante') {
+                    document.getElementById('cond-beca').classList.remove('hidden');
+                }
+            }
+        }
+
+        function handleSedeChange() {
+            const val = document.querySelector('select[name="sede"]').value;
+            if(val && val !== 'No definida') {
+                document.getElementById('cond-facultad').classList.remove('hidden');
+            } else {
+                document.getElementById('cond-facultad').classList.add('hidden');
+            }
+        }
+
+        function nextFromPerfil() {
+            if(!currentRole) return showToast("Por favor, selecciona un rol para continuar.", "error");
+            const conocimiento = document.querySelector('input[name="conocimiento"]:checked');
+            if(!conocimiento) return showToast("Por favor, indica tu nivel de familiaridad.", "error");
+
+            document.getElementById('ri-icon').innerText = currentRoleIcon;
+            document.getElementById('ri-text').innerText = currentRoleText;
+            document.getElementById('role-indicator').classList.remove('hidden');
+            document.getElementById('role-indicator').classList.add('inline-flex');
+
+            document.getElementById('sec-perfil').classList.add('hidden');
+            document.getElementById('prog-1').className = "h-2 flex-1 bg-snb-lila rounded-full";
+
+            if (conocimiento.value === 'Ninguno') {
+                routeSource = 'sec-perfil';
+                document.getElementById('sec-cierre').classList.remove('hidden');
+                document.getElementById('prog-2').className = "h-2 flex-1 bg-snb-lila rounded-full";
+                document.getElementById('prog-3').className = "h-2 flex-1 bg-snb-lila rounded-full";
+            } else {
+                routeSource = 'sec-generales';
+                document.getElementById('sec-generales').classList.remove('hidden');
+                document.getElementById('prog-2').className = "h-2 flex-1 bg-snb-lila/50 rounded-full";
+            }
+        }
+
+        function nextFromGenerales() {
+            document.getElementById('sec-generales').classList.add('hidden');
+            document.getElementById('prog-2').className = "h-2 flex-1 bg-snb-lila rounded-full";
+            
+            if (currentRole === 'estudiante' || currentRole === 'admitido') {
+                document.getElementById('sec-estudiantes').classList.remove('hidden');
+                routeSource = 'sec-estudiantes';
+            } else if (currentRole === 'docente') {
+                document.getElementById('sec-docentes').classList.remove('hidden');
+                routeSource = 'sec-docentes';
+            } else if (currentRole === 'administrativo') {
+                document.getElementById('sec-admin').classList.remove('hidden');
+                routeSource = 'sec-admin';
+            } else {
+                document.getElementById('sec-cierre').classList.remove('hidden');
+                document.getElementById('prog-3').className = "h-2 flex-1 bg-snb-verde rounded-full";
+                routeSource = 'sec-generales';
+            }
+        }
+
+        function nextToCierre(fromId) {
+            document.getElementById(fromId).classList.add('hidden');
+            document.getElementById('sec-cierre').classList.remove('hidden');
+            document.getElementById('prog-3').className = "h-2 flex-1 bg-snb-lila rounded-full";
+        }
+
+        function goBack(currentId, targetId) {
+            document.getElementById(currentId).classList.add('hidden');
+            document.getElementById(targetId).classList.remove('hidden');
+        }
+
+        function backFromCierre() {
+            document.getElementById('sec-cierre').classList.add('hidden');
+            document.getElementById(routeSource).classList.remove('hidden');
+            document.getElementById('prog-3').className = "h-2 flex-1 bg-snb-lila/30 rounded-full";
+        }
+
+        function renderScaleQuestion(containerId, name, question, type) {
+            const container = document.getElementById(containerId);
+            const labels = type === 'claridad' 
+                ? ['1 - Nada claro', '2 - Poco claro', '3 - Medianamente claro', '4 - Claro', '5 - Muy claro'] 
+                : type === 'adecuacion'
+                ? ['1 - Nada adecuado', '2 - Poco adecuado', '3 - Medianamente adecuado', '4 - Adecuado', '5 - Muy adecuado']
+                : ['1 - Nada viable', '2 - Poco viable', '3 - Medianamente viable', '4 - Viable', '5 - Muy viable'];
+
+            let html = `
+                <div class="space-y-3">
+                    <label class="block font-semibold text-slate-800">${question}</label>
+                    <div class="flex flex-wrap gap-2">`;
+            
+            for(let i=1; i<=5; i++){
+                html += `<label class="scale-radio cursor-pointer flex-1 min-w-[60px]">
+                            <input type="radio" name="${name}" value="${i}" class="hidden">
+                            <div class="h-full bg-white flex flex-col items-center justify-center p-2 border border-slate-300 rounded-lg text-xs text-center transition-all hover:bg-slate-50">${labels[i-1].replace('-', '<br><span class="font-bold text-sm text-snb-turquesa">')}</span></div>
+                         </label>`;
+            }
+            
+            html += `<label class="scale-radio cursor-pointer flex-1 min-w-[100px]">
+                        <input type="radio" name="${name}" value="Info Insuficiente" class="hidden">
+                        <div class="h-full bg-white flex items-center justify-center p-2 border border-slate-300 rounded-lg text-xs text-center transition-all hover:bg-slate-50 text-slate-500">Info<br>Insuficiente</div>
+                     </label>
+                     <label class="scale-radio cursor-pointer flex-1 min-w-[80px]">
+                        <input type="radio" name="${name}" value="No Aplica" class="hidden">
+                        <div class="h-full bg-white flex items-center justify-center p-2 border border-slate-300 rounded-lg text-xs text-center transition-all hover:bg-slate-50 text-slate-500">No Aplica</div>
+                     </label>
+                    </div></div>`;
+            container.innerHTML += html;
+        }
+
+        const initQuestions = () => {
+            renderScaleQuestion('g-questions-container', 'g_claridad', '¿Qué tan claro te resulta el contenido de la propuesta que conoces?', 'claridad');
+            renderScaleQuestion('g-questions-container', 'g_adecuacion', '¿Qué tan adecuada te parece la propuesta para atender las necesidades de becas?', 'adecuacion');
+            
+            renderScaleQuestion('e-questions-container', 'e_postulacion', '¿Qué tan claro te resulta cómo postularte a la BUP?', 'claridad');
+            renderScaleQuestion('e-questions-container', 'e_beneficios', '¿Qué tan claro te resulta qué beneficios podrías recibir según tu nivel?', 'claridad');
+            renderScaleQuestion('e-questions-container', 'e_contribucion', '¿Qué tan claro te resulta qué actividades se reconocen como contribución?', 'claridad');
+            renderScaleQuestion('e-questions-container', 'e_perdida', '¿Qué tan claro te resulta qué situaciones pueden llevar a la pérdida de la BUP?', 'claridad');
+            renderScaleQuestion('e-questions-container', 'e_adecuacion', '¿Qué tan adecuado te parece el conjunto de beneficios previsto para tu nivel?', 'adecuacion');
+            renderScaleQuestion('e-questions-container', 'e_viabilidad', '¿Qué tan viable sería cumplir la contribución académica sin afectar tu avance?', 'viabilidad');
+            renderScaleQuestion('e-questions-container', 'e_transicion', '¿Qué tan claro te resulta qué reglas se aplicarían a tu beca actual en la transición?', 'claridad');
+            
+            renderScaleQuestion('d-questions-container', 'd_rol', '¿Qué tan claro te resulta el papel del responsable académico del seguimiento?', 'claridad');
+            renderScaleQuestion('d-questions-container', 'd_actividades', '¿Qué tan adecuado te parece el diseño de las actividades de contribución?', 'adecuacion');
+            renderScaleQuestion('d-questions-container', 'd_tiempo', '¿Qué tan adecuado te parece el tiempo máximo de contribución previsto?', 'adecuacion');
+            renderScaleQuestion('d-questions-container', 'd_carga', 'Con tu carga académica actual, ¿qué tan viable sería asumir este seguimiento?', 'viabilidad');
+
+            renderScaleQuestion('a-questions-container', 'a_ciclo', '¿Qué tan claro te resulta el ciclo de convocatoria y asignación de la BUP?', 'claridad');
+            renderScaleQuestion('a-questions-container', 'a_dependencia', '¿Qué tan claro te resulta qué le corresponde hacer a tu dependencia o instancia?', 'claridad');
+            renderScaleQuestion('a-questions-container', 'a_calendarios', '¿Qué tan viable consideras coordinar esto con los calendarios de admisión y matrícula?', 'viabilidad');
+            renderScaleQuestion('a-questions-container', 'a_financiera', '¿Qué tan viable consideras documentar el respaldo financiero de las BUP?', 'viabilidad');
+            renderScaleQuestion('a-questions-container', 'a_seguimiento', 'Con las herramientas actuales, ¿qué tan viable sería realizar el seguimiento que te corresponde?', 'viabilidad');
+            renderScaleQuestion('a-questions-container', 'a_criterios', '¿Qué tan claro te resulta el significado de los criterios para distribuir recursos del Fondo?', 'claridad');
+            renderScaleQuestion('a-questions-container', 'a_adecuacion', '¿Qué tan adecuado te parece el conjunto de criterios para reconocer las necesidades?', 'adecuacion');
+
+            const temas = ["Requisitos de acceso", "Beneficios y configuraciones", "Dedicación y compatibilidad", "Contribución académica", "Continuidad y pérdida", "Transición de becas", "Trámites y responsabilidades", "Financiación y Fondo", "Información y seguimiento", "Otro tema"];
+            const pCont = document.getElementById('prioritarios-container');
+            temas.forEach(tema => {
+                pCont.innerHTML += `
+                    <label class="flex items-center gap-2 cursor-pointer p-2 hover:bg-slate-50 rounded-lg">
+                        <input type="checkbox" name="f_prioritarios" value="${tema}" class="w-4 h-4 text-snb-turquesa accent-snb-turquesa" onchange="limitCheckboxes(this)">
+                        <span>${tema}</span>
+                    </label>
+                `;
+            });
+        };
+
+        function limitCheckboxes(checkbox) {
+            const checked = document.querySelectorAll('input[name="f_prioritarios"]:checked');
+            if (checked.length > 2) {
+                checkbox.checked = false;
+                showToast("Puedes seleccionar un máximo de 2 temas prioritarios.", "warning");
+            }
+        }
+
+        async function submitForm() {
+            const btn = document.getElementById('btnSubmit');
+            btn.innerHTML = '<span class="material-icons animate-spin">refresh</span> Enviando...';
+            btn.disabled = true;
+
+            const formData = new FormData(document.getElementById('feedbackForm'));
+            const data = Object.fromEntries(formData.entries());
+            
+            const prioritarios = Array.from(document.querySelectorAll('input[name="f_prioritarios"]:checked')).map(cb => cb.value).join(', ');
+            data.f_prioritarios = prioritarios;
+
+            try {
+                if(APP_SCRIPT_URL.includes("URL_DE_TU")) {
+                    console.log("Modo de prueba (falta URL de Apps Script):", data);
+                    setTimeout(() => showSuccess(), 1000);
+                    return;
+                }
+
+                const response = await fetch(APP_SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors', 
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                showSuccess();
+            } catch (error) {
+                console.error('Error al enviar:', error);
+                showToast("Hubo un error al conectar con el servidor. Intenta nuevamente.", "error");
+                btn.innerHTML = 'Enviar Aportes <span class="material-icons text-snb-lima">send</span>';
+                btn.disabled = false;
+            }
+        }
+
+        function showSuccess() {
+            document.getElementById('sec-cierre').classList.add('hidden');
+            document.getElementById('sec-success').classList.remove('hidden');
+        }
+
+        window.onload = () => {
+            initQuestions();
+            window.addEventListener('keydown', function(e) {
+                if (e.keyIdentifier == 'U+000A' || e.keyIdentifier == 'Enter' || e.keyCode == 13) {
+                    if (e.target.nodeName == 'INPUT' && e.target.type == 'text') { e.preventDefault(); return false; }
+                }
+            }, true);
+        };
+    </script>
+</body>
+</html>
